@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
 
-declare_id!("6FuCSdKgB9uZKvSY8wEMEKs72fRyqsyhkYAL4eJjRTT6");
+declare_id!("CVrU5e1iwZ2PB9fVJGyCFSWoPCALNMz6fBhZFFMouNq2");
 
 // --- Constants & Space Calculation ---
 const MAX_CLASS_ID: usize = 64;
