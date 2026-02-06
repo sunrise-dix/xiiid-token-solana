@@ -166,12 +166,11 @@ pub struct CompleteClass<'info> {
     pub config: Account<'info, Config>,
     #[account(mut, address = config.owner)] // onlyOwner 검증
     pub owner: Signer<'info>,
-    pub class: Account<'info, ClassAccount>,
     #[account(
         init,
         payer = owner,
         space = 8 + str_len(MAX_CLASS_RESULT_ID) + str_len(MAX_TITLE) + 32 + 4 + 1,
-        seeds = [b"completion", class.key().as_ref(), student.key().as_ref()],
+        seeds = [b"completion", class_result_id.as_bytes()],
         bump
     )]
     pub completion: Account<'info, CompletionAccount>,
@@ -186,12 +185,11 @@ pub struct ReportBug<'info> {
     pub config: Account<'info, Config>,
     #[account(mut, address = config.owner)] // onlyOwner 검증
     pub owner: Signer<'info>,
-    pub class: Account<'info, ClassAccount>,
     #[account(
         init,
         payer = owner,
         space = 8 + str_len(MAX_REPORT_ID) + str_len(MAX_QUESTION_ID) + str_len(MAX_TITLE) + str_len(MAX_DESC) + str_len(MAX_CATEGORY) + str_len(MAX_PRIORITY) + 32 + 1,
-        seeds = [b"report", class.key().as_ref(), args.report_id.as_bytes(), args.user_address.as_ref()],
+        seeds = [b"report", args.report_id.as_bytes()],
         bump
     )]
     pub report: Account<'info, ReportAccount>,
