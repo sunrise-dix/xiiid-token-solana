@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
 
-declare_id!("3Xa6qsuvAuxxTVLKHggsvCZUHGPADGxNFKzJ6CRg51NZ");
+declare_id!("J6fKvYJvvaZ1RvYYBMy7L7jpUaLkWUzzZXKEfr5UfBrr");
 
 // --- Constants & Space Calculation ---
 const MAX_CLASS_ID: usize = 64;
@@ -56,15 +56,12 @@ pub mod xiiid_token_solana {
     /// 3. 강의 완료 기록 (Solidity의 complete 함수 - onlyOwner)
     pub fn complete_class(ctx: Context<CompleteClass>, class_result_id: String, title: String, score: u32) -> Result<()> {
         let completion = &mut ctx.accounts.completion;
-        let class = &mut ctx.accounts.class;
 
         completion.class_result_id = class_result_id;
         completion.student = ctx.accounts.student.key();
         completion.title = title;
         completion.score = score;
         completion.bump = ctx.bumps.completion;
-
-        class.completion_count = class.completion_count.saturating_add(1);
 
         Ok(())
     }
@@ -169,7 +166,6 @@ pub struct CompleteClass<'info> {
     pub config: Account<'info, Config>,
     #[account(mut, address = config.owner)] // onlyOwner 검증
     pub owner: Signer<'info>,
-    #[account(mut)]
     pub class: Account<'info, ClassAccount>,
     #[account(
         init,
@@ -190,7 +186,6 @@ pub struct ReportBug<'info> {
     pub config: Account<'info, Config>,
     #[account(mut, address = config.owner)] // onlyOwner 검증
     pub owner: Signer<'info>,
-    #[account(mut)]
     pub class: Account<'info, ClassAccount>,
     #[account(
         init,
