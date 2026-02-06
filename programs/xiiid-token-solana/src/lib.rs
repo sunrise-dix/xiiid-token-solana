@@ -12,6 +12,8 @@ const MAX_TOPIC: usize = 64;
 const MAX_DIFFICULTY: usize = 32;
 const MAX_QUESTION_ID: usize = 64;
 const MAX_PRIORITY: usize = 32;
+const MAX_CLASS_RESULT_ID: usize = 64;
+const MAX_REPORT_ID: usize = 64;
 
 fn str_len(len: usize) -> usize {
     4 + len
@@ -52,11 +54,11 @@ pub mod xiiid_token_solana {
     }
 
     /// 3. 강의 완료 기록 (Solidity의 complete 함수 - onlyOwner)
-    pub fn complete_class(ctx: Context<CompleteClass>, title: String, score: u32) -> Result<()> {
+    pub fn complete_class(ctx: Context<CompleteClass>, class_result_id: String, title: String, score: u32) -> Result<()> {
         let completion = &mut ctx.accounts.completion;
         let class = &mut ctx.accounts.class;
 
-        completion.class = class.key();
+        completion.class_result_id = class_result_id;
         completion.student = ctx.accounts.student.key();
         completion.title = title;
         completion.score = score;
@@ -70,9 +72,8 @@ pub mod xiiid_token_solana {
     /// 4. 버그 리포트 (Solidity의 report 함수 - onlyOwner)
     pub fn report_bug(ctx: Context<ReportBug>, args: ReportBugArgs) -> Result<()> {
         let report = &mut ctx.accounts.report;
-        let class = &mut ctx.accounts.class;
 
-        report.class = class.key();
+        report.report_id = args.report_id;
         report.question_id = args.question_id;
         report.title = args.title;
         report.description = args.description;
@@ -114,7 +115,7 @@ pub struct ClassAccount {
 
 #[account]
 pub struct CompletionAccount {
-    pub class: Pubkey,
+    pub class_result_id: String,
     pub title: String,
     pub student: Pubkey,
     pub score: u32,
@@ -123,7 +124,7 @@ pub struct CompletionAccount {
 
 #[account]
 pub struct ReportAccount {
-    pub class: Pubkey,
+    pub report_id: String,
     pub question_id: String,
     pub title: String,
     pub description: String,
@@ -162,7 +163,7 @@ pub struct CreateClass<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(title: String)]
+#[instruction(class_result_id: String, title: String)]
 pub struct CompleteClass<'info> {
     #[account(seeds = [b"config"], bump = config.bump)]
     pub config: Account<'info, Config>,
@@ -173,7 +174,7 @@ pub struct CompleteClass<'info> {
     #[account(
         init,
         payer = owner,
-        space = 8 + 32 + str_len(MAX_TITLE) + 32 + 4 + 1,
+        space = 8 + str_len(MAX_CLASS_RESULT_ID) + str_len(MAX_TITLE) + 32 + 4 + 1,
         seeds = [b"completion", class.key().as_ref(), student.key().as_ref()],
         bump
     )]
@@ -194,8 +195,8 @@ pub struct ReportBug<'info> {
     #[account(
         init,
         payer = owner,
-        space = 8 + 32 + str_len(MAX_QUESTION_ID) + str_len(MAX_TITLE) + str_len(MAX_DESC) + str_len(MAX_CATEGORY) + str_len(MAX_PRIORITY) + 32 + 1,
-        seeds = [b"report", class.key().as_ref(), args.question_id.as_bytes(), args.user_address.as_ref()],
+        space = 8 + str_len(MAX_REPORT_ID) + str_len(MAX_QUESTION_ID) + str_len(MAX_TITLE) + str_len(MAX_DESC) + str_len(MAX_CATEGORY) + str_len(MAX_PRIORITY) + 32 + 1,
+        seeds = [b"report", class.key().as_ref(), args.report_id.as_bytes(), args.user_address.as_ref()],
         bump
     )]
     pub report: Account<'info, ReportAccount>,
@@ -221,6 +222,7 @@ pub struct CreateClassArgs {
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct ReportBugArgs {
+    pub report_id: String,
     pub question_id: String,
     pub title: String,
     pub description: String,
