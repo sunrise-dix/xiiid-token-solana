@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-xiiid_token_solana = "J6fKvYJvvaZ1RvYYBMy7L7jpUaLkWUzzZXKEfr5UfBrr"
+xiiid_token_solana = "3Xa6qsuvAuxxTVLKHggsvCZUHGPADGxNFKzJ6CRg51NZ"
 
 [registry]
 url = "https://api.apr.dev"
