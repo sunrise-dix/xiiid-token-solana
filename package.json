@@ -1,5 +1,6 @@
 {
   "license": "ISC",
+  "type": "module",
   "scripts": {
     "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
     "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check",
@@ -7,8 +8,14 @@
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.32.1",
+    "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
+    "@metaplex-foundation/umi": "^1.5.1",
+    "@metaplex-foundation/umi-bundle-defaults": "^1.5.1",
     "@solana/spl-token": "^0.4.14",
-    "bn.js": "^5.2.2"
+    "@solana/web3.js": "^1.98.4",
+    "@streamflow/common": "^12.1.1",
+    "@streamflow/stream": "^12.1.1",
+    "bn.js": "^5.2.3"
   },
   "devDependencies": {
     "@types/bn.js": "^5.2.0",
