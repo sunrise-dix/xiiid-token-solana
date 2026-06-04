@@ -1,7 +1,7 @@
 {
-  "name": "XIIID Token",
+  "name": "XIIID",
   "symbol": "XIIID",
-  "description": "XIIID Ecosystem Token",
-  "image": "https://xclass-dev.web.app/token/xiiid.png",
-  "external_url": "https://xclass-dev.web.app"
+  "description": "Official XIIID Token",
+  "image": "https://xclass.xiiid.ai/token/xiiid.png",
+  "external_url": "https://xclass.xiiid.ai"
 }

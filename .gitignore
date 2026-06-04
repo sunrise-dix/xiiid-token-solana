@@ -35,3 +35,4 @@ test-ledger/
 .idea
 .DS_Store
 thumbs.db
+spl-token/wallet/*

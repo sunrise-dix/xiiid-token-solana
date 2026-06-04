@@ -1,0 +1,6 @@
+{
+  "cluster": "mainnet-beta",
+  "mint": "...",
+  "decimals": 9,
+  "keypairPath": "/Users/sunrise/.config/solana/id.json"
+}

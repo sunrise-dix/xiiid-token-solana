@@ -1,6 +1,7 @@
 import fs from "fs";
 
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
+import { clusterApiUrl } from "@solana/web3.js";
 
 import {
   createMetadataAccountV3,
@@ -10,21 +11,29 @@ import {
 import { keypairIdentity, none, publicKey } from "@metaplex-foundation/umi";
 import { base58 } from "@metaplex-foundation/umi/serializers";
 
-const MINT_ADDRESS = "4rzbhSUnLEj1xPt8gt72hdJAY4WK3BjdU96vPCgwj8qp";
-
-const METADATA_URI = "https://xclass-dev.web.app/token/metadata.json";
-
-const secret = Uint8Array.from(
-  JSON.parse(fs.readFileSync("/Users/sunrise/.config/solana/id.json", "utf8")),
+// const METADATA_URI = "https://xclass-dev.web.app/token/metadata.json";
+const METADATA_URI = "https://xclass.xiiid.ai/token/metadata.json";
+//
+const tokenConfig = JSON.parse(
+  fs.readFileSync(
+    new URL("./config/token-config.json", import.meta.url),
+    "utf8",
+  ),
 );
 
-const umi = createUmi("https://api.devnet.solana.com").use(mplTokenMetadata());
+const secret = Uint8Array.from(
+  JSON.parse(fs.readFileSync(tokenConfig.keypairPath, "utf8")),
+);
+
+const umi = createUmi(clusterApiUrl(tokenConfig.cluster)).use(
+  mplTokenMetadata(),
+);
 
 const payer = umi.eddsa.createKeypairFromSecretKey(secret);
 
 umi.use(keypairIdentity(payer));
 
-const mint = publicKey(MINT_ADDRESS);
+const mint = publicKey(tokenConfig.mint);
 
 const metadataData = {
   name: "XIIID",

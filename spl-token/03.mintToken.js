@@ -4,20 +4,22 @@ import { Connection, Keypair, PublicKey, clusterApiUrl } from "@solana/web3.js";
 
 import { getOrCreateAssociatedTokenAccount, mintTo } from "@solana/spl-token";
 
-const MINT = "6xSShRCT67tcEnhQzyo31w6MvHnMKfgDgSU2qFWMzoTC";
+const tokenConfig = JSON.parse(
+  fs.readFileSync(new URL("./config/token-config.json", import.meta.url), "utf8"),
+);
 
-const DECIMALS = 9n;
+const DECIMALS = BigInt(tokenConfig.decimals);
 const SUPPLY = 10_000_000_000n; // 100억
 
 const secret = Uint8Array.from(
-  JSON.parse(fs.readFileSync("/Users/sunrise/.config/solana/id.json", "utf8")),
+  JSON.parse(fs.readFileSync(tokenConfig.keypairPath, "utf8")),
 );
 
 const wallet = Keypair.fromSecretKey(secret);
 
-const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+const connection = new Connection(clusterApiUrl(tokenConfig.cluster), "confirmed");
 
-const mint = new PublicKey(MINT);
+const mint = new PublicKey(tokenConfig.mint);
 
 const ata = await getOrCreateAssociatedTokenAccount(
   connection,
